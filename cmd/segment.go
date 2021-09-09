@@ -58,25 +58,11 @@ type Event struct {
 }
 
 var (
-	totalPageCounter = promauto.NewCounter(prometheus.CounterOpts{
+	totalPageCounter = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "total_page_views",
 		Help: "The total number of page views recorded by segment.io",
-	})
-
-	searchPageCounter = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "total_search_page_views",
-		Help: "The total number of search page views recorded by segment.io",
-	})
-
-	insightsPageCounter = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "total_insights_page_views",
-		Help: "The total number of insight page views recorded by segment.io",
-	})
-
-	dashboardPageCounter = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "total_dashboard_page_views",
-		Help: "The total number of dashboard page views recorded by segment.io",
-	})
+	}, []string{"pageType"},
+	)
 )
 
 func segmentHandler(c *gin.Context) {
@@ -93,15 +79,15 @@ func segmentHandler(c *gin.Context) {
 
 	switch e.Type {
 	case "page":
-		totalPageCounter.Inc()
+		totalPageCounter.WithLabelValues("total").Inc()
 		if strings.Contains(e.Properties.Path, "search") {
-			searchPageCounter.Inc()
+			totalPageCounter.WithLabelValues("search").Inc()
 			if strings.Contains(e.Properties.Path, "insights") {
-				insightsPageCounter.Inc()
+				totalPageCounter.WithLabelValues("insights").Inc()
 			}
 		}
 		if strings.Contains(e.Properties.Path, "dashboards") {
-			dashboardPageCounter.Inc()
+			totalPageCounter.WithLabelValues("dashboards").Inc()
 		}
 		c.JSON(200, "success")
 	default:

@@ -31,6 +31,6 @@ func InitHTTPServer() {
 	router.Use(p.Instrument())
 	router.Use(gin.Recovery())
 	router.GET("/ping", func(c *gin.Context) { c.JSON(200, gin.H{"message": "pong!"}) })
-	router.POST("/monitor", func(c *gin.Context) { segmentHandler(c) })
+	router.POST("/monitor_ui", func(c *gin.Context) { segmentHandler(c) })
 	router.Run(fmt.Sprintf(":%v", viper.GetInt("port")))
 }

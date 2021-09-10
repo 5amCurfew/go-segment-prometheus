@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
+	log "github.com/sirupsen/logrus"
 )
 
 type Event struct {
@@ -89,6 +90,7 @@ func segmentHandler(c *gin.Context) {
 		if strings.Contains(e.Properties.Path, "dashboards") {
 			totalPageCounter.WithLabelValues("dashboards").Inc()
 		}
+		log.Infof("segment.io webhook %s success %s", e.Type, e.Properties.Path)
 		c.JSON(200, "success")
 	default:
 		message := fmt.Sprintf("Event %s ignored\n", e.Type)

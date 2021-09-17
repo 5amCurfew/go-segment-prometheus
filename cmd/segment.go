@@ -16,6 +16,7 @@ import (
 
 type Event struct {
 	AnonymousID string `json:"anonymousId"`
+	EventType   string `json:"event"`
 	Context     struct {
 		IP      string `json:"ip"`
 		Library struct {
@@ -62,8 +63,18 @@ var (
 	totalPageCounter = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "total_page_views",
 		Help: "The total number of page views recorded by segment.io",
-	}, []string{"pageType"},
-	)
+	}, []string{"pageType"})
+
+	totalEventCounter = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "total_events",
+		Help: "The total number of events recorded by segment.io",
+	}, []string{"event"})
+
+	email_events = map[string]bool{
+		"email_delivered": true,
+		"email_opened":    true,
+		"email_clicked":   true,
+	}
 )
 
 func segmentHandler(c *gin.Context) {
@@ -92,8 +103,16 @@ func segmentHandler(c *gin.Context) {
 		}
 		log.Infof("segment.io webhook %s success %s", e.Type, e.Properties.Path)
 		c.JSON(200, "success")
+	case "track":
+		if email_events[e.EventType] {
+			totalEventCounter.WithLabelValues(e.EventType).Inc()
+			log.Infof("segment.io webhook %s success %s", e.Type, e.EventType)
+		} else {
+			log.Infof("segment.io webhook %s ignored %s\n", e.Type, e.EventType)
+		}
+		c.JSON(200, "success")
 	default:
-		message := fmt.Sprintf("Event %s ignored\n", e.Type)
+		message := fmt.Sprintf("segment.io webhook %s ignored\n", e.Type)
 		c.JSON(200, message)
 		return
 	}

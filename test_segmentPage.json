@@ -1,0 +1,42 @@
+{ 
+  "anonymousId": "hello-anonymousId",
+  "context": {
+    "ip": "0.0.0.0",
+    "library": {
+      "name": "analytics.js",
+      "version": "next-1.30.0"
+    },
+    "locale": "en-US",
+    "page": {
+      "path": "/",
+      "referrer": "referrer",
+      "search": "",
+      "title": "pageTitle",
+      "url": "pageUrl"
+    },
+    "signalDeviceId": "device123",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
+  },
+  "integrations": {},
+  "messageId": "msgId",
+  "originalTimestamp": "2021-09-07T15:40:03.798Z",
+  "properties": {
+    "app": {
+      "version": "6fadec115c0dbd0b0f09d67005aadc640651dbf8"
+    },
+    "environment": "production",
+    "path": "/workspace/hello-workspace/search/stories",
+    "referrer": "pageUrl",
+    "search": "?folder=hello-folder",
+    "title": "pageTitle",
+    "url": "pageUrl/search",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36",
+    "userId": "hello-user",
+    "workspaceId": "hello-workspace"
+  },
+  "receivedAt": "2021-09-07T15:40:04.511Z",
+  "sentAt": "2021-09-07T15:40:03.798Z",
+  "timestamp": "2021-09-07T15:40:04.511Z",
+  "type": "page",
+  "userId": "hello-user"
+}
